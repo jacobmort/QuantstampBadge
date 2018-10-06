@@ -8,7 +8,7 @@ class App extends Component {
     return (<Router>
       <Switch>
         <Route exact path="/" render={props => (
-          <h2>hello world {{ props }}</h2>
+          <h2>hello world</h2>
         )} />
         <Route path="/start-audit" component={StartAudit} />
       </Switch>

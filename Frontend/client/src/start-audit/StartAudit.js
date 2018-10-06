@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import getWeb3 from "../utils/getWeb3";
 
 import "./StartAudit.css";
+import QuanstampAbi from "./Quanstamp.abi.js";
+const QuantstampTokenAddress = '0x99ea4db9ee77acd40b119bd1dc4e33e1c070b80d';
+const QuantstampContractAddress = '0x74814602062af64fd7a83155645ddb265598220e';
 
 class StartAudit extends Component {
   state = { storageValue: 0, web3: null, accounts: null, contract: null };
@@ -13,10 +16,12 @@ class StartAudit extends Component {
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
+      let authorizeContract = new web3.eth.Contract(QuanstampAbi, QuantstampTokenAddress);
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      this.setState({ web3, accounts }, this.runExample);
+
+      this.setState({ web3: web3, account: accounts[0], authorizeContract: authorizeContract });
+      // this.setState({ web3, accounts }, this.authorizeQuantstamp);
+      // this.authorizeQuantstamp();
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -26,9 +31,14 @@ class StartAudit extends Component {
     }
   };
 
-  runExample = async () => {
-
+  authorizeQuantstamp = async () => {
+    this.state.authorizeContract.methods.approve(QuantstampContractAddress, 3000).send({ from: this.state.account });
   };
+
+  requestAudit = async () => {
+
+  }
+
 
   render() {
     if (!this.state.web3) {
