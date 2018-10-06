@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import getWeb3 from "../utils/getWeb3";
+import BigNumber from 'bignumber.js';
 
 import "./StartAudit.css";
 import QuanstampAbi from "./Quanstamp.abi.js";
@@ -22,10 +23,12 @@ class StartAudit extends Component {
       this.setState({ web3: web3, account: accounts[0], authorizeContract: authorizeContract });
       const qspBalance = await this.getQpsBalance();
       const amountLeftover = await this.getAmountOfAuthorized();
+
       console.log(qspBalance);
       console.log(amountLeftover);
       this.setState({ balance: qspBalance, authorized: amountLeftover });
       // this.authorizeQuantstamp();
+
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -51,8 +54,15 @@ class StartAudit extends Component {
 
   }
 
+  humanReadable(erc20Balance) {
+    const divisor = new BigNumber(10).pow(18); // Quanstamp ERC20 is 18 decimals
+    return new BigNumber(erc20Balance).div(divisor).toNumber();
+  }
+
 
   render() {
+    const balance = this.humanReadable(this.state.balance);
+    const authorized = this.humanReadable(this.state.authorized);
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
@@ -60,8 +70,8 @@ class StartAudit extends Component {
       <div className="App">
         <h1>Quantstamp Github Audit</h1>
         <h3>QPS</h3>
-        <div>balance: {this.state.balance}</div>
-        <div>quantstamp can spend on audits: {this.state.authorized}</div>
+        <div>balance: {balance}</div>
+        <div>quantstamp can spend on audits: {authorized}</div>
       </div>
     );
   }
