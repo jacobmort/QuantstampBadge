@@ -7,7 +7,7 @@ const QuantstampTokenAddress = '0x99ea4db9ee77acd40b119bd1dc4e33e1c070b80d';
 const QuantstampContractAddress = '0x74814602062af64fd7a83155645ddb265598220e';
 
 class StartAudit extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  state = { balance: 0, authorized: 0, web3: null, accounts: null, authorizeContract: null };
 
   componentDidMount = async () => {
     try {
@@ -20,7 +20,11 @@ class StartAudit extends Component {
 
 
       this.setState({ web3: web3, account: accounts[0], authorizeContract: authorizeContract });
-      // this.setState({ web3, accounts }, this.authorizeQuantstamp);
+      const qspBalance = await this.getQpsBalance();
+      const amountLeftover = await this.getAmountOfAuthorized();
+      console.log(qspBalance);
+      console.log(amountLeftover);
+      this.setState({ balance: qspBalance, authorized: amountLeftover });
       // this.authorizeQuantstamp();
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -30,6 +34,14 @@ class StartAudit extends Component {
       console.log(error);
     }
   };
+
+  getQpsBalance = async () => {
+    return this.state.authorizeContract.methods.balanceOf(this.state.account).call();
+  }
+
+  getAmountOfAuthorized = async () => {
+    return this.state.authorizeContract.methods.allowance(this.state.account, QuantstampContractAddress).call();
+  }
 
   authorizeQuantstamp = async () => {
     this.state.authorizeContract.methods.approve(QuantstampContractAddress, 3000).send({ from: this.state.account });
@@ -47,6 +59,9 @@ class StartAudit extends Component {
     return (
       <div className="App">
         <h1>Quantstamp Github Audit</h1>
+        <h3>QPS</h3>
+        <div>balance: {this.state.balance}</div>
+        <div>quantstamp can spend on audits: {this.state.authorized}</div>
       </div>
     );
   }
