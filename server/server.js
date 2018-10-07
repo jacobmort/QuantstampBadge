@@ -15,12 +15,14 @@ app.get('/api/hello', (req, res) => {
 });
 app.get('/badge/:githubUser/:repo', (req, res) => {
   const docKey = `${req.params.githubUser}:${req.params.repo}`;
-  console.log(docKey);
   firestore.collection('repos').doc(docKey)
     .get()
     .then((val) => {
       let file;
-      if (val.data().passing) {
+      if (!val.data()) {
+        file = "fund-me.svg";
+      }
+      else if (val.data().passing) {
         file = "passing.svg";
       } else {
         file = "failing.svg";
@@ -28,8 +30,17 @@ app.get('/badge/:githubUser/:repo', (req, res) => {
       res.sendFile(path.join(__dirname, '../client/public/images', file));
     })
     .catch((err) => {
-      console.log(err)
-      res.err(err);
+      console.log(err);
+      res.status(500);
+      res.render('error', { error: err })
+    });
+});
+app.get('/report/:githubUser/:repo', (req, res) => {
+  const docKey = `${req.params.githubUser}:${req.params.repo}`;
+  firestore.collection('repos').doc(docKey)
+    .get()
+    .then((val) => {
+      res.send(val.data().contracts);
     });
 });
 
