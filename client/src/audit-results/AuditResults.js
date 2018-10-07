@@ -34,7 +34,7 @@ class AuditResults extends Component {
     if (filename in this.state.auditResults) {
       return (<a href={`${this.state.auditResults[filename]}`} >Full Report</a >)
     } else {
-      return '';
+      return <button onClick={this.props.startAudit}>Start Audit</button>;
     }
   }
 
