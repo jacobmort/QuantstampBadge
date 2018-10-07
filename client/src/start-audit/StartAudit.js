@@ -35,7 +35,6 @@ class StartAudit extends Component {
       const qspBalance = await this.getQpsBalance();
       const amountLeftover = await this.getAmountOfAuthorized();
       const auditsInProgress = await this.getAuditsInProgress();
-      console.log(auditsInProgress);
       const statusUpdates = await this.populateAuditsInProgress(auditsInProgress);
       this.updateAuditsInProgress(statusUpdates);
       this.setState({ balance: qspBalance, authorized: amountLeftover, statusUpdates: statusUpdates });
@@ -114,15 +113,16 @@ class StartAudit extends Component {
   }
 
   listenForAuditRequest(fromBlock, fromAccount) {
-    this.state.auditContractEvents.events.LogAuditRequested({ fromBlock: fromBlock, address: fromAccount }, this.auditContractRequest);
+    this.state.auditContractEvents.events.LogAuditRequested({ fromBlock: fromBlock, address: fromAccount }, this.auditContractRequest.bind(this));
   }
 
   auditContractRequest(err, event) {
     if (err) {
       console.log(err);
     } else {
+      console.log(event);
       this.setState({ requestId: event.returnValues.requestId });
-      this.fetch(
+      fetch(
         `http://localhost:5000/audits-in-progress/add/${this.props.match.params.githubUser}/${this.props.match.params.repo}/${event.returnValues.requestId}`, {
           method: "POST"
         })
