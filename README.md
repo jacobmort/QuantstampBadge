@@ -21,7 +21,7 @@ If everything goes well the "fund me" badge will turn into this
 [![Quantstamp Status](https://quantstamp-badge.herokuapp.com/badge/test/pass)](https://quantstamp-badge.herokuapp.com/start-audit/test/pass)
 
 ## Development
-`npm run server` && `npm run client` to get them started.
+`npm run server` && `npm run client` to get them started.  In my scramble to get this up on Heroku you'll need to add `http://localhost:5000` to api calls made from frontend if you run this locally.
 
 ## Why?
 Green badges feel good.  And hopefully we can make everyone's eth a little safer when it's parked in contracts.
