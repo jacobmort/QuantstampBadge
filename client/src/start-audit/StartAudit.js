@@ -102,7 +102,7 @@ class StartAudit extends Component {
           <button onClick={this.authorizeQuantstamp.bind(this)}>Add to Budget</button>
           <input type="number" placeholder="budget additional qps" value={this.state.authorizeAdditionalAmount} onChange={this.handleAuthAmountChange.bind(this)} />
         </div>
-        <AuditResults githubUser={this.props.match.params.githubUser} repo={this.props.match.params.repo}></AuditResults>
+        <AuditResults githubUser={this.props.match.params.githubUser} repo={this.props.match.params.repo} startAudit={this.requestAudit}></AuditResults>
       </div >
     );
   }

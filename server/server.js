@@ -3,9 +3,19 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 5000;
 const firebase = require("firebase");
-const config = require("./config");
-
-firebase.initializeApp(config);
+if (process.env.NODE_ENV === 'production') {
+  firebase.initializeApp({
+    apiKey: process.env.apiKey,
+    authDomain: process.env.authDomain,
+    databaseURL: process.env.databaseURL,
+    projectId: process.env.projectId,
+    storageBucket: process.env.storageBucket,
+    messagingSenderId: process.env.messagingSenderId
+  });
+} else {
+  const config = require("./config");
+  firebase.initializeApp(config);
+}
 const firestore = firebase.firestore();
 firestore.settings({ timestampsInSnapshots: true });
 
