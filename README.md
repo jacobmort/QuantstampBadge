@@ -1,1 +1,1 @@
-[![Quantstamp Status](https://localhost:5000/badge/ubien/quantstampbadge](https://localhost:5000/report/ubien/quantstampbadge)
+[![Quantstamp Status](https://quantstamp-badge.herokuapp.com/badge/ubien/quantstampbadge](https://quantstamp-badge.herokuapp.com/report/ubien/quantstampbadge)

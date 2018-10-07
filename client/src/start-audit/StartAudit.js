@@ -42,10 +42,6 @@ class StartAudit extends Component {
     }
   };
 
-  componentWillUnmount() {
-
-  }
-
   getQpsBalance = async () => {
     return this.state.authorizeContract.methods.balanceOf(this.state.account).call();
   }
