@@ -1,1 +1,1 @@
-[![Quantstamp Status](https://quantstamp-badge.herokuapp.com/badge/ubien/quantstampbadge](https://quantstamp-badge.herokuapp.com/report/ubien/quantstampbadge)
+[![Quantstamp Status](https://quantstamp-badge.herokuapp.com/badge/ubien/quantstampbadge)]
