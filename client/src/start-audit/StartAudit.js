@@ -4,22 +4,19 @@ import BigNumber from 'bignumber.js';
 import Web3 from "web3";
 
 import "./StartAudit.css";
+
+import AuditResults from "../audit-results/AuditResults";
 import QuanstampTokenAbi from "./QuanstampToken.abi";
 import QuantstampAuditAbi from "./QuantstampAudit.abi";
 
 const QuantstampTokenAddress = '0x99ea4db9ee77acd40b119bd1dc4e33e1c070b80d';
 const QuantstampContractAddress = '0x74814602062af64fd7a83155645ddb265598220e';
-const githubApi = "https://api.github.com/search/code?q=solidity+in:file+extension:sol+repo:"; //ubien/ShitCoinGrabBag";
 
 class StartAudit extends Component {
-  state = { balance: 0, authorized: 0, web3: null, accounts: null, authorizeContract: null, auditContract: null, authorizeAdditionalAmount: 0, solFiles: [] };
+  state = { balance: 0, authorized: 0, web3: null, accounts: null, authorizeContract: null, auditContract: null, authorizeAdditionalAmount: 0 };
 
   componentDidMount = async () => {
     try {
-      this.getSolidityFilesFromGithub(this.props.match.params.githubUser, this.props.match.params.repo)
-        .then((json) => {
-          this.setState({ solFiles: json.items });
-        });
       // Get network provider and web3 instance.
       const web3Socket = new Web3(new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws'));
       const web3 = await getWeb3();
@@ -47,13 +44,6 @@ class StartAudit extends Component {
 
   componentWillUnmount() {
 
-  }
-
-  getSolidityFilesFromGithub(githubUser, repo) {
-    return fetch(`${githubApi}${githubUser}/${repo}`)
-      .then((results) => {
-        return results.json();
-      });
   }
 
   getQpsBalance = async () => {
@@ -116,12 +106,7 @@ class StartAudit extends Component {
           <button onClick={this.authorizeQuantstamp.bind(this)}>Add to Budget</button>
           <input type="number" placeholder="budget additional qps" value={this.state.authorizeAdditionalAmount} onChange={this.handleAuthAmountChange.bind(this)} />
         </div>
-        <div>
-          <h3>Contracts in Repo</h3>
-          {this.state.solFiles.map((file, i) => {
-            return (<div key={i}>{file.name}</div>)
-          })}
-        </div>
+        <AuditResults githubUser={this.props.match.params.githubUser} repo={this.props.match.params.repo}></AuditResults>
       </div >
     );
   }

@@ -9,6 +9,12 @@ firebase.initializeApp(config);
 const firestore = firebase.firestore();
 firestore.settings({ timestampsInSnapshots: true });
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // API calls
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
@@ -35,7 +41,7 @@ app.get('/badge/:githubUser/:repo', (req, res) => {
       res.render('error', { error: err })
     });
 });
-app.get('/report/:githubUser/:repo', (req, res) => {
+app.get('/audit/:githubUser/:repo', (req, res) => {
   const docKey = `${req.params.githubUser}:${req.params.repo}`;
   firestore.collection('repos').doc(docKey)
     .get()
