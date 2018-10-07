@@ -20,5 +20,8 @@ When you click through the "fund me" badge above you end up on a page for the cr
 If everything goes well the "fund me" badge will turn into this 
 [![Quantstamp Status](https://quantstamp-badge.herokuapp.com/badge/test/pass)](https://quantstamp-badge.herokuapp.com/start-audit/test/pass)
 
+## Development
+`npm run server` && `npm run client` to get them started.
+
 ## Why?
 Green badges feel good.  And hopefully we can make everyone's eth a little safer when it's parked in contracts.
