@@ -38,7 +38,7 @@ class StartAudit extends Component {
       const statusUpdates = await this.populateAuditsInProgress(auditsInProgress);
       this.updateAuditsInProgress(statusUpdates);
       this.setState({ balance: qspBalance, authorized: amountLeftover, statusUpdates: statusUpdates });
-      this.listenForAuditRequest(0, this.state.account);
+      // this.listenForAuditRequest(0, this.state.account);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -122,7 +122,7 @@ class StartAudit extends Component {
       console.log(event);
       this.setState({ requestId: event.returnValues.requestId });
       fetch(
-        `/audits-in-progress/add/${this.props.match.params.githubUser}/${this.props.match.params.repo}/${event.returnValues.requestId}`, {
+        `http://localhost:3000/audits-in-progress/add/${this.props.match.params.githubUser}/${this.props.match.params.repo}/${event.returnValues.requestId}`, {
           method: "POST"
         })
     }

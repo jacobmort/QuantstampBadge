@@ -56,7 +56,11 @@ app.get('/audit/:githubUser/:repo', (req, res) => {
   firestore.collection('repos').doc(docKey)
     .get()
     .then((val) => {
-      res.send(val.data().contracts);
+      let contracts = {};
+      if (val.data() !== undefined) {
+        contracts = val.data().contracts();
+      }
+      res.send(contracts);
     });
 });
 
@@ -68,24 +72,25 @@ app.post('/audits-in-progress/remove/:githubUser/:repo/:id/', (req, res) => {
 
 });
 
-app.post(`/audit/save/:githubUser/:repo/:success/:link`, (req, res) => {
-  const docKey = `${req.params.githubUser}:${req.params.repo}`;
-  firestore.collection('repos').doc(docKey).set({
-    passing: req.params.success === 'true' ? 1 : 0
-  }, { merge: true });
+// app.post(`/audit/save/:githubUser/:repo/:success/:link`, (req, res) => {
+//   const docKey = `${req.params.githubUser}:${req.params.repo}`;
+//   firestore.collection('repos').doc(docKey).set({
+//     passing: req.params.success === 'true' ? 1 : 0
+//   }, { merge: true });
 
-  res.status(200).send();
-});
+//   res.status(200).send();
+// });
 
 app.get('/audits-in-progress/:githubUser/:repo/', (req, res) => {
   const docKey = `${req.params.githubUser}:${req.params.repo}`;
   firestore.collection('repos').doc(docKey)
     .get()
     .then((val) => {
-      res.send(val.data().inprogress);
+      let inProgress = val.data().inprogress !== undefined ? val.data.inprogress : [];
+      res.send(inProgress);
     });
 
-    
+
   firestore.collection('repos').doc(docKey).set({
 
   })
