@@ -1,0 +1,29 @@
+{
+  "name": "QuantstampBadge",
+  "version": "1.0.0",
+  "description": "Quantstamp badge for github",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-lint": "eslint --ignore-pattern \"build\" --ignore-path .gitignore .",
+    "server": "cd server && node server.js",
+    "client": " cd client && npm run start",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+  },
+  "author": "Jacob Mortensen",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^3.5.1",
+    "express": "^4.16.3",
+    "firebase": "^5.5.3",
+    "nodemon": "^1.17.4"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^3.19.0",
+    "eslint-config-strongloop": "^2.1.0",
+    "eslint-plugin-react": "^7.8.2",
+    "module-alias": "2.0.6"
+  }
+}
