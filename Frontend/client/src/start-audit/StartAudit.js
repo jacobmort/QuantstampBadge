@@ -9,12 +9,17 @@ import QuantstampAuditAbi from "./QuantstampAudit.abi";
 
 const QuantstampTokenAddress = '0x99ea4db9ee77acd40b119bd1dc4e33e1c070b80d';
 const QuantstampContractAddress = '0x74814602062af64fd7a83155645ddb265598220e';
+const githubApi = "https://api.github.com/search/code?q=solidity+in:file+language:sol+repo:"; //ubien/ShitCoinGrabBag";
 
 class StartAudit extends Component {
-  state = { balance: 0, authorized: 0, web3: null, accounts: null, authorizeContract: null, auditContract: null, authorizeAdditionalAmount: 0 };
+  state = { balance: 0, authorized: 0, web3: null, accounts: null, authorizeContract: null, auditContract: null, authorizeAdditionalAmount: 0, solFiles: [] };
 
   componentDidMount = async () => {
     try {
+      this.getSolidityFilesFromGithub(this.props.match.params.githubUser, this.props.match.params.repo)
+        .then((json) => {
+          this.setState({ solFiles: json.items });
+        });
       // Get network provider and web3 instance.
       const web3Socket = new Web3(new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws'));
       const web3 = await getWeb3();
@@ -39,6 +44,13 @@ class StartAudit extends Component {
       console.log(error);
     }
   };
+
+  getSolidityFilesFromGithub(githubUser, repo) {
+    return fetch(`${githubApi}${githubUser}/${repo}`)
+      .then((results) => {
+        return results.json();
+      });
+  }
 
   getQpsBalance = async () => {
     return this.state.authorizeContract.methods.balanceOf(this.state.account).call();
@@ -74,10 +86,10 @@ class StartAudit extends Component {
     console.log(event);
   }
 
-
   render() {
     const balance = this.humanReadable(this.state.balance);
     const authorized = this.humanReadable(this.state.authorized);
+    const githubUrl = `https://github.com/${this.props.match.params.githubUser}/${this.props.match.params.repo}`;
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
@@ -91,8 +103,12 @@ class StartAudit extends Component {
         <div>
           <input type="number" placeholder="budget additional qps" value={this.state.authorizeAdditionalAmount} onChange={this.handleAuthAmountChange.bind(this)} />
           <button onClick={this.authorizeQuantstamp.bind(this)}>Authorize QPS Spend</button>
+          <div><a href={githubUrl}>{this.props.match.params.githubUser}/{this.props.match.params.repo}</a></div>
+          {this.state.solFiles.map((file, i) => {
+            return (<span key={i}>{file.name}</span>)
+          })}
         </div>
-      </div>
+      </div >
     );
   }
 }

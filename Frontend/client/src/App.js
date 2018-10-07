@@ -7,10 +7,10 @@ class App extends Component {
   render() {
     return (<Router>
       <Switch>
-        <Route exact path="/" render={props => (
+        <Route path="/start-audit/:githubUser/:repo" component={StartAudit} />
+        <Route path="/" render={props => (
           <h2>hello world</h2>
         )} />
-        <Route path="/start-audit" component={StartAudit} />
       </Switch>
     </Router>)
   }
