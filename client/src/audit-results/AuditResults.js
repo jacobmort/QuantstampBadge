@@ -26,7 +26,7 @@ class AuditResults extends Component {
   }
 
   getAuditResults(githubUser, repo) {
-    return fetch(`http://localhost:5000/audit/${githubUser}/${repo}`)
+    return fetch(`/audit/${githubUser}/${repo}`)
       .then(results => results.json());
   }
 

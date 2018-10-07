@@ -76,7 +76,7 @@ class StartAudit extends Component {
   }
 
   getAuditsInProgress = async () => {
-    return fetch(`http://localhost:5000/audits-in-progress/${this.props.match.params.githubUser}/${this.props.match.params.repo}`).then((results) => results.json());
+    return fetch(`/audits-in-progress/${this.props.match.params.githubUser}/${this.props.match.params.repo}`).then((results) => results.json());
   }
 
   populateAuditsInProgress = async (auditIds) => {
@@ -91,8 +91,7 @@ class StartAudit extends Component {
   updateAuditsInProgress(updates) {
     for (let file of Object.keys(updates)) {
       if (updates[file].status === 4 || updates[file].status === 5) {
-        // fetch(`http://localhost:5000/audits-in-progress/remove/${this.props.match.params.githubUser}/${this.props.match.params.repo}/${}`)
-
+        // fetch(`/audits-in-progress/remove/${this.props.match.params.githubUser}/${this.props.match.params.repo}/${}`)
       }
     }
   }
@@ -123,7 +122,7 @@ class StartAudit extends Component {
       console.log(event);
       this.setState({ requestId: event.returnValues.requestId });
       fetch(
-        `http://localhost:5000/audits-in-progress/add/${this.props.match.params.githubUser}/${this.props.match.params.repo}/${event.returnValues.requestId}`, {
+        `/audits-in-progress/add/${this.props.match.params.githubUser}/${this.props.match.params.repo}/${event.returnValues.requestId}`, {
           method: "POST"
         })
     }
