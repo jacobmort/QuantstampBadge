@@ -12,7 +12,7 @@ Add this link to your `README.md` and replace username/repo
 [![Quantstamp Status](https://quantstamp-badge.herokuapp.com/badge/GITHUB_USERNAME/REPO_NAME)](https://quantstamp-badge.herokuapp.com/start-audit/GITHUB_USERNAME/REPO_NAME)
 ```
 
-The badge will initially start looking off like this:
+The badge will initially start off like this:
 [![Quantstamp Status](https://quantstamp-badge.herokuapp.com/badge/GITHUB_USERNAME/REPO_NAME)](https://quantstamp-badge.herokuapp.com/start-audit/cryptocopycats/awesome-cryptokitties) (note: link to badge is purposely broken here so that it will remain in initial state)
 
 When you click through the "fund me" badge above you end up on a page for the crypto kitties repo (try it!).  People can donate [QSP](https://coinmarketcap.com/currencies/quantstamp/) to fund an audit.  It displays all of the .sol files found in the repo along with their current audit status.  If enough QSP has been donated you can trigger an audit from the page.
