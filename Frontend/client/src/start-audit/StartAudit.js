@@ -9,7 +9,7 @@ import QuantstampAuditAbi from "./QuantstampAudit.abi";
 
 const QuantstampTokenAddress = '0x99ea4db9ee77acd40b119bd1dc4e33e1c070b80d';
 const QuantstampContractAddress = '0x74814602062af64fd7a83155645ddb265598220e';
-const githubApi = "https://api.github.com/search/code?q=solidity+in:file+language:sol+repo:"; //ubien/ShitCoinGrabBag";
+const githubApi = "https://api.github.com/search/code?q=solidity+in:file+extension:sol+repo:"; //ubien/ShitCoinGrabBag";
 
 class StartAudit extends Component {
   state = { balance: 0, authorized: 0, web3: null, accounts: null, authorizeContract: null, auditContract: null, authorizeAdditionalAmount: 0, solFiles: [] };
@@ -44,6 +44,10 @@ class StartAudit extends Component {
       console.log(error);
     }
   };
+
+  componentWillUnmount() {
+
+  }
 
   getSolidityFilesFromGithub(githubUser, repo) {
     return fetch(`${githubApi}${githubUser}/${repo}`)
@@ -95,17 +99,27 @@ class StartAudit extends Component {
     }
     return (
       <div className="App">
-        <h1>Quantstamp Github Audit</h1>
-        <h3>QPS</h3>
-        <div><input className="pure-input-1-2" type="text" name="account" placeholder="Your Address" value={this.state.account} readOnly /></div>
-        <div>balance: {balance}</div>
-        <div>quantstamp can spend on audits: {authorized}</div>
+        <h1>Quantstamp Audit</h1>
+        <h3>For <a href={githubUrl}>{this.props.match.params.githubUser}/{this.props.match.params.repo}</a></h3>
         <div>
+          <span>Eth Account</span>
+          <input type="text" name="account" placeholder="Your Address" value={this.state.account} readOnly /></div>
+        <div>
+          <span>QPS Balance</span>
+          <input type="number" value={balance} readOnly />
+        </div>
+        <div>
+          <span>Existing QPS Budget</span>
+          <input type="number" value={authorized} readOnly />
+        </div>
+        <div>
+          <button onClick={this.authorizeQuantstamp.bind(this)}>Add to Budget</button>
           <input type="number" placeholder="budget additional qps" value={this.state.authorizeAdditionalAmount} onChange={this.handleAuthAmountChange.bind(this)} />
-          <button onClick={this.authorizeQuantstamp.bind(this)}>Authorize QPS Spend</button>
-          <div><a href={githubUrl}>{this.props.match.params.githubUser}/{this.props.match.params.repo}</a></div>
+        </div>
+        <div>
+          <h3>Contracts in Repo</h3>
           {this.state.solFiles.map((file, i) => {
-            return (<span key={i}>{file.name}</span>)
+            return (<div key={i}>{file.name}</div>)
           })}
         </div>
       </div >
