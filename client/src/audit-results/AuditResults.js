@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-const githubApi = "https://api.github.com/search/code?q=solidity+in:file+extension:sol+repo:"; //ubien/ShitCoinGrabBag";
+const githubSearchApi = "https://api.github.com/search/code?q=solidity+in:file+extension:sol+repo:"; //ubien/ShitCoinGrabBag";
 
 class AuditResults extends Component {
-  state = { solFiles: [], auditResults: {} };
+  state = { solFiles: [], auditResults: {}, limit: 3000 };
 
   componentDidMount = async () => {
     this.getSolidityFilesFromGithub(this.props.githubUser, this.props.repo)
@@ -21,20 +21,25 @@ class AuditResults extends Component {
   };
 
   getSolidityFilesFromGithub(githubUser, repo) {
-    return fetch(`${githubApi}${githubUser}/${repo}`)
+    return fetch(`${githubSearchApi}${githubUser}/${repo}`)
       .then((results) => results.json());
   }
 
   getAuditResults(githubUser, repo) {
-    return fetch(`/audit/${githubUser}/${repo}`)
+    return fetch(`http://localhost:5000/audit/${githubUser}/${repo}`)
       .then(results => results.json());
   }
 
-  auditLink(filename) {
-    if (filename in this.state.auditResults) {
-      return (<a href={`${this.state.auditResults[filename]}`} >Full Report</a >)
+  handleLimitChange(evt) {
+    this.setState({ limit: evt.target.value });
+  }
+
+
+  auditLink(file) {
+    if (false && file.name in this.state.auditResults) {
+      return (<a href={`${this.state.auditResults[file.name]}`} >Full Report</a >)
     } else {
-      return <button onClick={this.props.startAudit}>Start Audit</button>;
+      return <button onClick={this.props.startAudit.bind(this, `https://raw.githubusercontent.com/${this.props.githubUser}/${this.props.repo}/master/${file.path}`, this.state.limit)}>Start Audit</button>;
     }
   }
 
@@ -43,11 +48,15 @@ class AuditResults extends Component {
       <div>
         <div>
           <h3>Contracts in Repo</h3>
+          <div>
+            <span>QSP Spend Limit</span>
+            <input type="number" value={this.state.limit} onChange={this.handleLimitChange.bind(this)} />
+          </div>
           {this.state.solFiles.map((file, i) => {
             return (
               <div key={i}>
                 <span>{file.name}</span>
-                <span>{this.auditLink(file.name)}</span>
+                <span>{this.auditLink(file)}</span>
               </div>
             )
           })}

@@ -91,11 +91,11 @@ class StartAudit extends Component {
           <span>Eth Account</span>
           <input type="text" name="account" placeholder="Your Address" value={this.state.account} readOnly /></div>
         <div>
-          <span>QPS Balance</span>
+          <span>Your QPS Balance</span>
           <input type="number" value={balance} readOnly />
         </div>
         <div>
-          <span>Existing QPS Budget</span>
+          <span>Your Budgeted QPS</span>
           <input type="number" value={authorized} readOnly />
         </div>
         <div>
