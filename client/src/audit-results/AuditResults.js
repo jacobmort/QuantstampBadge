@@ -36,10 +36,24 @@ class AuditResults extends Component {
 
 
   auditLink(file) {
-    if (false && file.name in this.state.auditResults) {
+    const filePath = `https://raw.githubusercontent.com/${this.props.githubUser}/${this.props.repo}/master/${file.path}`;
+    let status = 0;
+    if (filePath in this.props.statusUpdates) {
+      status = this.props.statusUpdtes[filePath];
+    }
+
+    if (status > 0 && status < 4) {
+      return (<span>Contract is being processed</span>);
+    } else if (false && file.name in this.state.auditResults) {
       return (<a href={`${this.state.auditResults[file.name]}`} >Full Report</a >)
+    } else if (status === 4 || status === 5) {
+      console.log(`status > 4- link should already been in DB and removed from in progress:${file.name}`);
     } else {
-      return <button onClick={this.props.startAudit.bind(this, `https://raw.githubusercontent.com/${this.props.githubUser}/${this.props.repo}/master/${file.path}`, this.state.limit)}>Start Audit</button>;
+      let timeoutMessage = "";
+      if (status === 6) {
+        timeoutMessage = "<span>The Audit timed out and will need to be re-submitted";
+      }
+      return (<div>{timeoutMessage}<button onClick={this.props.startAudit.bind(this, filePath, this.state.limit)}>Start Audit</button></div>);
     }
   }
 

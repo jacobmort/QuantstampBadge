@@ -60,6 +60,37 @@ app.get('/audit/:githubUser/:repo', (req, res) => {
     });
 });
 
+app.post('/audits-in-progress/add/:githubUser/:repo/:id', (req, res) => {
+
+});
+
+app.post('/audits-in-progress/remove/:githubUser/:repo/:id/', (req, res) => {
+
+});
+
+app.post(`/audit/save/:githubUser/:repo/:success/:link`, (req, res) => {
+  const docKey = `${req.params.githubUser}:${req.params.repo}`;
+  firestore.collection('repos').doc(docKey).set({
+    passing: req.params.success === 'true' ? 1 : 0
+  }, { merge: true });
+
+  res.status(200).send();
+});
+
+app.get('/audits-in-progress/:githubUser/:repo/', (req, res) => {
+  const docKey = `${req.params.githubUser}:${req.params.repo}`;
+  firestore.collection('repos').doc(docKey)
+    .get()
+    .then((val) => {
+      res.send(val.data().inprogress);
+    });
+
+    
+  firestore.collection('repos').doc(docKey).set({
+
+  })
+})
+
 
 // Host react files
 if (process.env.NODE_ENV === 'production') {
